@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import assets, { taskData } from "../assets/assets";
+import AuthContext from "../context/AuthContext";
 
 const AddTaskContainer = ({ date, setShowContainer }) => {
   const [task, setTask] = useState("");
   const [hour, setHour] = useState("1");
   const [minute, setMinute] = useState("00");
   const [ampm, setAmPm] = useState("AM");
-  
+  const { api } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const hour24 =
@@ -22,23 +23,29 @@ const AddTaskContainer = ({ date, setShowContainer }) => {
 
     const dateObj = new Date(year, month - 1, day, hour24, parseInt(minute), 0);
 
-
-    taskData.push({
-      id: taskData.length +1 ,
-      task: task,
-      date:  dateObj.toISOString(),
-      compleated: false,
-    });
-
-    
-
+    try {
+      const response = await api.post("api/daily-task", {
+        task: task,
+        date: dateObj,
+        compleated: false,
+      });
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+    }
 
     setShowContainer(false);
   };
 
   return (
     <div className="bg-stone-300 py-6 px-3 pt-12 relative">
-      <img src={assets.close} alt="" className="absolute top-1 right-1 w-8" onClick={() => setShowContainer(false)}/>
+      <img
+        src={assets.close}
+        alt=""
+        className="absolute top-1 right-1 w-8"
+        onClick={() => setShowContainer(false)}
+      />
       <form onSubmit={(e) => handleSubmit(e)}>
         <textarea
           className="border bg-white w-full rounded p-4"

@@ -10,6 +10,8 @@ const Home = () => {
   const [edit, setEdit] = useState(null);
   const today = date.toISOString().split("T")[0];
 
+  
+
   const fetchTodayTask = () => {
     let tempData = data.filter((item) => item.date.split("T")[0] === today);
     setTasks(tempData);
@@ -53,7 +55,7 @@ const Home = () => {
                         hour: "2-digit",
                         minute: "2-digit",
                         hour12: true,
-                      })}
+                      })}- { new Date(item.date).toLocaleDateString()}
                     </p>
                   </div>
                   <div>

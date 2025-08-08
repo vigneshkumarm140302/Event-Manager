@@ -56,8 +56,8 @@ const LongTermGoals = () => {
                 <div>
                   <p className="text-xl">{item.task}</p>
                   <p>
-                    Duration : {new Date(item.from).toLocaleDateString()} -{" "}
-                    {new Date(item.end).toLocaleDateString()}
+                    Duration : {new Date(item.start_date).toLocaleDateString()} -{" "}
+                    {new Date(item.end_date).toLocaleDateString()}
                   </p>
                 </div>
                 <div>
@@ -92,8 +92,8 @@ const LongTermGoals = () => {
               <div className="w-[80%]">
                 <p className="text-xl font-medium">{item.task}</p>
                 <p>
-                  Duration : {new Date(item.from).toLocaleDateString()} -{" "}
-                  {new Date(item.end).toLocaleDateString()}
+                  Duration : {new Date(item.start_date).toLocaleDateString()} -{" "}
+                  {new Date(item.end_date).toLocaleDateString()}
                 </p>
               </div>
               <div className="w-[20%] flex justify-end">

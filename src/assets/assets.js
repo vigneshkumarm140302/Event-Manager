@@ -8,10 +8,11 @@ import account from './account.png'
 import add from './add.svg'
 import add2 from './add2.svg'
 import close from './close.svg'
+import logo from './logo.png'
 
 
 const assets = {
-    user, task, goals, date, edit, tick, account, add, close, add2, 
+    user, task, goals, date, edit, tick, account, add, close, add2, logo
 }
 
 export default assets

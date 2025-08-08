@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import assets from "../assets/assets";
 import TaskContext from "../context/TaskContext";
+import AuthContext from "../context/AuthContext";
 
 const EditLongTermGoals = ({ id = null, setShowContainer }) => {
   const { goals, setGoals } = useContext(TaskContext);
+  const { api } = useContext(AuthContext)
 
   const [task, setTask] = useState("");
   const [from, setFrom] = useState("");
@@ -15,8 +17,8 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
       const existing = goals.find((item) => item.id === id);
       if (existing) {
         setTask(existing.task || "");
-        const fromDate = existing.from ? new Date(existing.from).toISOString().slice(0, 10) : "";
-        const toDate = existing.end ? new Date(existing.end).toISOString().slice(0, 10) : "";
+        const fromDate = existing.start_date ? new Date(existing.start_date).toISOString().slice(0, 10) : "";
+        const toDate = existing.end_date ? new Date(existing.end_date).toISOString().slice(0, 10) : "";
         setFrom(fromDate);
         setTo(toDate);
       }
@@ -27,15 +29,14 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
     }
   }, [id, goals]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!task.trim()) return alert("Please enter a task.");
     if (!from || !to) return alert("Please choose both From and To dates.");
 
-    const fromISO = new Date(from).toISOString();
-    const toISO = new Date(to).toISOString();
-
+    const fromISO = new Date(from).toLocaleDateString()
+    const toISO = new Date(to).toLocaleDateString()
     if (id != null) {
       const updated = goals.map((g) =>
         g.id === id
@@ -44,14 +45,13 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
       );
       setGoals(updated);
     } else {
-      const newItem = {
-        id: goals.length + 1, 
-        task: task.trim(),
-        from: fromISO,
-        end: toISO,
-        compleated: false,
-      };
-      setGoals([...goals, newItem]);
+
+      const response = await api.post('api/long-term-goals', {  task: task.trim(),
+        start_date: fromISO,
+        end_date: toISO,
+        compleated: false,})
+      console.log(response);
+      
     }
 
     setShowContainer(false);

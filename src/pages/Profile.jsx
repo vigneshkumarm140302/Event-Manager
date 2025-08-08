@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import assets from '../assets/assets'
 import ToggleSwitch from '../components/ToggleSwitch'
+import AuthContext from '../context/AuthContext'
 
 const Profile = () => {
+
+  const { navigate } = useContext(AuthContext)
   return (
     <div className="min-h-[92vh] p-4">
       <img src={assets.account} className='w-32 mx-auto' alt="" />
@@ -14,7 +17,7 @@ const Profile = () => {
         <p>vigneshkumarm140302@gmail.com</p>
         <p>Notification :</p>
         <ToggleSwitch />
-        <button className='bg-red-500 text-white py-1 px-3 rounded mt-2'>Logout</button>
+        <button className='bg-red-500 text-white py-1 px-3 rounded mt-2' onClick={() => navigate('/login')}>Logout</button>
       </div>
     </div>
   )

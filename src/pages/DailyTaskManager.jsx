@@ -14,10 +14,24 @@ const DailyTaskManager = () => {
   const [edit, setEdit] = useState(null);
   const [d, m, y] = date.split("-").map((item) => parseInt(item));
 
-  const today = new Date(y, m - 1, d).toISOString().split("T")[0];
+  const today = new Date(y, m - 1, d).toLocaleDateString();
+
+
+  const current_selection = new Date(y, m - 1, d).toLocaleDateString('en-IN', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+const current_select_weekday = new Date(y, m - 1, d).toLocaleDateString('en-IN', {
+  weekday: 'long',
+});
+  
 
   const fetchTodayTask = () => {
-    let tempData = data.filter((item) => item.date.split("T")[0] === today);
+    let tempData = data.filter(
+      (item) => new Date(item.date).toLocaleDateString() == today
+    );
+
     setTasks(tempData);
   };
 
@@ -35,7 +49,7 @@ const DailyTaskManager = () => {
     <div className="h-[92vh] px-4 overflow-y-auto ">
       <div className="p-2">
         <h2 className="text-3xl">Add Event</h2>
-        <p className="text-lg mt-2"> {date}</p>
+        <p className="text-lg mt-2"> {current_selection} - {current_select_weekday}</p>
         <hr className="mt-4 text-slate-600" />
       </div>
       <img
@@ -74,7 +88,11 @@ const DailyTaskManager = () => {
                     </p>
                   </div>
                   <div>
-                    <img src={assets.edit} alt="" onClick={() => setEdit(item.id)}/>
+                    <img
+                      src={assets.edit}
+                      alt=""
+                      onClick={() => setEdit(item.id)}
+                    />
                   </div>
                 </div>
                 <button
