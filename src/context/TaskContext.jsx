@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { taskData, dummyGoalTasks } from "../assets/assets";
 import AuthContext from "./AuthContext";
 
 const TaskContext = createContext();
@@ -34,12 +33,22 @@ export const TaskProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+
   useEffect(() => {
     fetchTask();
     fetchLongTermGoals();
   }, []);
 
-  const value = { data, date, setData, goals, setGoals };
+  const value = {
+    data,
+    date,
+    setData,
+    goals,
+    setGoals,
+    fetchLongTermGoals,
+    
+  };
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
 };

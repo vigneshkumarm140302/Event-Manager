@@ -4,61 +4,78 @@ import TaskContext from "../context/TaskContext";
 import AuthContext from "../context/AuthContext";
 
 const EditLongTermGoals = ({ id = null, setShowContainer }) => {
-  const { goals, setGoals } = useContext(TaskContext);
-  const { api } = useContext(AuthContext)
+  const { goals, fetchLongTermGoals } = useContext(TaskContext);
+  const { api } = useContext(AuthContext);
 
   const [task, setTask] = useState("");
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
-
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
 
   useEffect(() => {
     if (id != null) {
       const existing = goals.find((item) => item.id === id);
       if (existing) {
         setTask(existing.task || "");
-        const fromDate = existing.start_date ? new Date(existing.start_date).toISOString().slice(0, 10) : "";
-        const toDate = existing.end_date ? new Date(existing.end_date).toISOString().slice(0, 10) : "";
-        setFrom(fromDate);
-        setTo(toDate);
+
+        let tempStateDate = existing.start_date
+          ? new Date(existing.start_date).toISOString().slice(0, 10)
+          : "";
+        let TempEndDate = existing.end_date
+          ? new Date(existing.end_date).toISOString().slice(0, 10)
+          : "";
+        setStart(tempStateDate);
+        setEnd(TempEndDate);
       }
     } else {
       setTask("");
-      setFrom("");
-      setTo("");
+      setStart("");
+      setEnd("");
     }
   }, [id, goals]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!task.trim()) return alert("Please enter a task.");
-    if (!from || !to) return alert("Please choose both From and To dates.");
-
-    const fromISO = new Date(from).toLocaleDateString()
-    const toISO = new Date(to).toLocaleDateString()
+    const start_date = new Date(start).toLocaleDateString();
+    const end_date = new Date(end).toLocaleDateString();
     if (id != null) {
-      const updated = goals.map((g) =>
-        g.id === id
-          ? { ...g, task: task.trim(), from: fromISO, end: toISO }
-          : g
-      );
-      setGoals(updated);
-    } else {
+      try {
+        const response = await api.patch(`api/long-term-goals-edit/${id}`, {
+          task: task.trim(),
+          start_date: start_date,
+          end_date: end_date,
+          compleated: false,
+        });
 
-      const response = await api.post('api/long-term-goals', {  task: task.trim(),
-        start_date: fromISO,
-        end_date: toISO,
-        compleated: false,})
-      console.log(response);
-      
+        if (response.status === 200) {
+          fetchLongTermGoals();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const response = await api.post("api/long-term-goals", {
+          task: task.trim(),
+          start_date: start_date,
+          end_date: end_date,
+          compleated: false,
+        });
+
+        if (response.status === 201) {
+          updateGoal(response.data);
+          fetchLongTermGoals();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     setShowContainer(false);
   };
 
   return (
-    <div className="bg-white px-6 w-full rounded-lg py-16 relative max-w-lg">
+    <div className="bg-white px-6 w-full border rounded-lg py-16 relative max-w-lg">
       <img
         src={assets.close}
         className="absolute top-2 right-2 w-10 cursor-pointer"
@@ -76,14 +93,14 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
         />
 
         <p>Duration</p>
-        <div className="flex justify-between gap-4">
+        <div className="flex justify-between gap-1 ">
           <div className="flex-1">
             <p className="mb-1">From :</p>
             <input
               className="border border-gray-600 rounded-lg py-1.5 px-3 w-full"
               type="date"
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
+              value={start}
+              onChange={(e) => setStart(e.target.value)}
               required
             />
           </div>
@@ -92,8 +109,8 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
             <input
               className="border border-gray-600 rounded-lg py-1.5 px-3 w-full"
               type="date"
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
+              value={end}
+              onChange={(e) => setEnd(e.target.value)}
               required
             />
           </div>

@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   };
   api.interceptors.request.use(
     async (config) => {
-      const token = localStorage.getItem("access_token");
+      let token = localStorage.getItem("access_token");
 
       if (token) {
         const decode = jwtDecode(token);
@@ -53,8 +53,9 @@ export const AuthProvider = ({ children }) => {
       return config;
     },
     async (error) => {
-      return Promise.reject(error);
       console.log(error);
+      return Promise.reject(error);
+    
     }
   );
 
