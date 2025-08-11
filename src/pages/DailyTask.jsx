@@ -4,7 +4,7 @@ import TaskContext from "../context/TaskContext";
 import { useNavigate } from "react-router-dom";
 
 const DailyTask = () => {
-  const { date } = useContext(TaskContext);
+  const date  = new Date()
   const navigate = useNavigate();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth());

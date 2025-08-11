@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     if (accessToken) {
       fetchUserProfile();
     }
-  }, [accessToken, refreshToken]);
+  }, [accessToken]);
 
   const api = axios.create({
     baseURL: backendUrl,
@@ -83,6 +83,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null)
     setRefreshToken(null)
     setUserProfileData(null)
+    navigate('/login')
   }
 
   const value = {
