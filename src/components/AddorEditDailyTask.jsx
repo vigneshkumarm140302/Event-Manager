@@ -1,13 +1,44 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import assets, { taskData } from "../assets/assets";
 import AuthContext from "../context/AuthContext";
+import { useParams } from "react-router-dom";
+import TaskContext from "../context/TaskContext";
 
-const AddTaskContainer = ({ date, setShowContainer }) => {
+const AddorEditDailyTask = ({ editId = null, setShowContainer }) => {
+  const { date } = useParams();
+  const { dailyTask, fetchTask } = useContext(TaskContext);
   const [task, setTask] = useState("");
-  const [hour, setHour] = useState("1");
+  const [hour, setHour] = useState("01");
   const [minute, setMinute] = useState("00");
   const [ampm, setAmPm] = useState("AM");
   const { api } = useContext(AuthContext);
+
+  const EditData = () => {
+    let temp = dailyTask.find((item) => item.id === editId);
+    if (!temp) {
+      return null;
+    }
+    let [time, period] = new Date(temp.date)
+      .toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+      .split(" ");
+
+    let [h, m] = time.split(":");
+    setHour(h);
+    setMinute(m);
+
+    setAmPm(period.toUpperCase());
+    setTask(temp.task);
+  };
+
+  useEffect(() => {
+    if (editId !== null) {
+      EditData();
+    }
+  }, [editId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,27 +50,62 @@ const AddTaskContainer = ({ date, setShowContainer }) => {
         ? 0
         : parseInt(hour);
 
-    const [day, month, year] = date.split("-").map(Number);
+    if (editId) {
 
-    const dateObj = new Date(year, month - 1, day, hour24, parseInt(minute), 0);
-
-    try {
-      const response = await api.post("api/daily-task", {
-        task: task,
-        date: dateObj,
-        compleated: false,
-      });
-      console.log(response);
+      let temp = dailyTask.find(item => item.id === editId)
+      let [d, m, y] = new Date(temp.date).toLocaleDateString().split('/')
+      const dateObj = new Date(
+        y,
+        m - 1,
+        d,
+        hour24,
+        parseInt(minute),
+        0
+      );
       
-    } catch (error) {
-      console.log(error);
+      
+      try {
+        const response = await api.patch(`api/daily-task-edit/${editId}`, {
+          task: task,
+          date: dateObj,
+        });
+        console.log(response);
+        if (response.status === 200) {
+          fetchTask();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const [day, month, year] = date.split("-").map(Number);
+
+      const dateObj = new Date(
+        year,
+        month - 1,
+        day,
+        hour24,
+        parseInt(minute),
+        0
+      );
+      try {
+        const response = await api.post("api/daily-task", {
+          task: task,
+          date: dateObj,
+          compleated: false,
+        });
+        if (response.status === 201) {
+          fetchTask();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     setShowContainer(false);
   };
 
   return (
-    <div className="bg-stone-300 py-6 px-3 pt-12 relative">
+    <div className="bg-stone-300 py-6 px-3 pt-12 relative rounded border w-full">
       <img
         src={assets.close}
         alt=""
@@ -63,7 +129,7 @@ const AddTaskContainer = ({ date, setShowContainer }) => {
             onChange={(e) => setHour(e.target.value)}
           >
             {Array.from({ length: 12 }, (_, i) => {
-              const hour = i + 1;
+              const hour = i.toString().padStart(2, "0");
               return (
                 <option key={hour} value={hour}>
                   {hour}
@@ -106,4 +172,4 @@ const AddTaskContainer = ({ date, setShowContainer }) => {
   );
 };
 
-export default AddTaskContainer;
+export default AddorEditDailyTask;

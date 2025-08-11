@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Title from "../components/Title";
 import assets from "../assets/assets";
 import TaskContext from "../context/TaskContext";
-import EditLongTermGoals from "../components/EditLongTermGoals";
+import AddorEditLongTermGoals from "../components/AddorEditLongTermGoals";
 import {
   LongTermGoalCompleateContainer,
   LongTermGoalContainer,
@@ -87,7 +87,7 @@ const LongTermGoals = () => {
 }
       {showContainer && (
         <div className="fixed top-0 left-0 bg-white/60 min-h-screen w-full flex items-center justify-center px-4">
-          <EditLongTermGoals
+          <AddorEditLongTermGoals
             id={editId}
             setShowContainer={(flag) => {
               setShowContainer(flag);

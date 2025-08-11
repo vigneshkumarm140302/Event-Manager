@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -14,6 +14,25 @@ export const AuthProvider = ({ children }) => {
   const [refreshToken, setRefreshToken] = useState(
     localStorage.getItem("refresh_token") || null
   );
+
+  const [userProfileData, setUserProfileData] = useState(null);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await api.get(`api/user-details`);
+      if (response.status === 200) {
+        setUserProfileData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (accessToken) {
+      fetchUserProfile();
+    }
+  }, [accessToken, refreshToken]);
 
   const api = axios.create({
     baseURL: backendUrl,
@@ -55,11 +74,28 @@ export const AuthProvider = ({ children }) => {
     async (error) => {
       console.log(error);
       return Promise.reject(error);
-    
     }
   );
 
-  const value = { backendUrl, navigate, api };
+
+  const Logout = async () => {
+    localStorage.clear()
+    setAccessToken(null)
+    setRefreshToken(null)
+    setUserProfileData(null)
+  }
+
+  const value = {
+    backendUrl,
+    navigate,
+    api,
+    setAccessToken,
+    setRefreshToken,
+    userProfileData,
+    setUserProfileData,
+    Logout, 
+    accessToken,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

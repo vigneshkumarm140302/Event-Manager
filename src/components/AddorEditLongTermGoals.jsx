@@ -3,7 +3,7 @@ import assets from "../assets/assets";
 import TaskContext from "../context/TaskContext";
 import AuthContext from "../context/AuthContext";
 
-const EditLongTermGoals = ({ id = null, setShowContainer }) => {
+const AddorEditLongTermGoals = ({ id = null, setShowContainer }) => {
   const { goals, fetchLongTermGoals } = useContext(TaskContext);
   const { api } = useContext(AuthContext);
 
@@ -63,7 +63,6 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
         });
 
         if (response.status === 201) {
-          updateGoal(response.data);
           fetchLongTermGoals();
         }
       } catch (error) {
@@ -75,7 +74,7 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
   };
 
   return (
-    <div className="bg-white px-6 w-full border rounded-lg py-16 relative max-w-lg">
+    <div className="bg-white px-6 w-full  rounded-lg py-16 relative  max-w-lg">
       <img
         src={assets.close}
         className="absolute top-2 right-2 w-10 cursor-pointer"
@@ -85,7 +84,7 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <textarea
           rows={5}
-          className="border border-gray-600 rounded-lg p-2"
+          className="border border-gray-600 rounded p-2"
           value={task}
           onChange={(e) => setTask(e.target.value)}
           placeholder="Describe the long term goal..."
@@ -93,21 +92,21 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
         />
 
         <p>Duration</p>
-        <div className="flex justify-between gap-1 ">
-          <div className="flex-1">
+        <div className="flex justify-between gap-2 ">
+          <div className="">
             <p className="mb-1">From :</p>
             <input
-              className="border border-gray-600 rounded-lg py-1.5 px-3 w-full"
+              className="border border-gray-600 rounded py-1.5  pl-1"
               type="date"
               value={start}
               onChange={(e) => setStart(e.target.value)}
               required
             />
           </div>
-          <div className="flex-1">
+          <div className="">
             <p className="mb-1">To :</p>
             <input
-              className="border border-gray-600 rounded-lg py-1.5 px-3 w-full"
+              className="border border-gray-600 rounded  py-1.5  pl-1"
               type="date"
               value={end}
               onChange={(e) => setEnd(e.target.value)}
@@ -116,7 +115,7 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
           </div>
         </div>
 
-        <button className="bg-amber-600 text-white py-2 rounded-lg mt-3">
+        <button className="bg-amber-600 text-white py-2 rounded mt-3">
           {id != null ? "Update Long Goal" : "Add to Long Goals"}
         </button>
       </form>
@@ -124,4 +123,4 @@ const EditLongTermGoals = ({ id = null, setShowContainer }) => {
   );
 };
 
-export default EditLongTermGoals;
+export default AddorEditLongTermGoals;

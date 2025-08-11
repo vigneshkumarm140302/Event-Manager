@@ -4,17 +4,16 @@ import AuthContext from "./AuthContext";
 const TaskContext = createContext();
 
 export const TaskProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+  const [dailyTask, setDailyTask] = useState([]);
   const [goals, setGoals] = useState([]);
-  const date = new Date();
-  const { api } = useContext(AuthContext);
+  const { api, accessToken } = useContext(AuthContext);
 
   const fetchTask = async () => {
     try {
       const response = await api.get("api/daily-task");
 
       if (response.status === 200) {
-        setData(response.data);
+        setDailyTask(response.data);
       } else {
         console.warn("Unexpected response:", response);
       }
@@ -34,20 +33,20 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-
   useEffect(() => {
-    fetchTask();
-    fetchLongTermGoals();
-  }, []);
+    if (accessToken) {
+      fetchTask();
+      fetchLongTermGoals();
+    }
+  }, [accessToken]);
 
   const value = {
-    data,
-    date,
-    setData,
+    dailyTask,
+    setDailyTask,
     goals,
     setGoals,
     fetchLongTermGoals,
-    
+    fetchTask,
   };
 
   return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;

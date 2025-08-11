@@ -8,6 +8,7 @@ import Navbar from './components/Navbar'
 import DailyTaskManager from './pages/DailyTaskManager'
 import Start from './pages/Start'
 import Login from './pages/Login'
+import Register from './pages/Register'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/long-term-goles' element={<LongTermGoals/>} />
         <Route path='/user-profile' element={<Profile/>} />
         <Route path='/daily-task-manager/:date' element={<DailyTaskManager/>} />
+        <Route path='/create-account' element={ <Register /> } />
       </Routes>
       
     </div>

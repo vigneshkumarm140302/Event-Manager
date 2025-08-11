@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import TaskContext from '../context/TaskContext';
 
 const Title = ({heading}) => {
-  const { date } = useContext(TaskContext)
+  const date = new Date()
+  
 
 const today = date.toLocaleDateString('en-IN', {
   day: 'numeric',
