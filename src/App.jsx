@@ -9,6 +9,7 @@ import DailyTaskManager from "./pages/DailyTaskManager";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
+import Start from "./pages/Start";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
         </Route>
         <Route path="/create-account" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/Event-Manager" element={<Start />} />
       </Routes>
     </div>
   );
