@@ -31,7 +31,7 @@ const Register = () => {
         localStorage.setItem("access_token", response.data.access);
         localStorage.setItem("refresh_token", response.data.refresh);
         setUserProfileData(response.data.user)
-        navigate("/");
+        navigate("/Event-Manager");
       }else{
         console.log(response);
         

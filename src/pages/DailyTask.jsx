@@ -97,7 +97,7 @@ const DailyTask = () => {
               key={index}
               className="border border-black h-12 flex items-center justify-center "
                onClick={() =>
-                day && navigate(`/daily-task-manager/${day}-${month + 1}-${year}`)
+                day && navigate(`/Event-Manager/daily-task-manager/${day}-${month + 1}-${year}`)
               }
             >
               {day ? day : ""}

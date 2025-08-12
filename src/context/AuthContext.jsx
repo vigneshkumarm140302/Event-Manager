@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null)
     setRefreshToken(null)
     setUserProfileData(null)
-    navigate('/login')
+    navigate('/Event-Manager/login')
   }
 
   const value = {

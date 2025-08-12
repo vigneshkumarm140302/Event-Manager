@@ -26,7 +26,7 @@ const Login = () => {
         ] = `Bearer ${response.data.access}`;
       }
 
-      navigate("/");
+      navigate("/Event-Manager");
     } catch (error) {
       alert("Invalid username or password");
       console.log(error.message);
