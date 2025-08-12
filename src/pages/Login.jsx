@@ -69,7 +69,7 @@ const Login = () => {
           Login
         </button>
         <p
-          onClick={() => navigate("/create-account")}
+          onClick={() => navigate("/Event-Manager/create-account")}
           className="text-gray-800"
         >
           If you already don't have an account ? click here to{" "}

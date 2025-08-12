@@ -98,7 +98,7 @@ const Register = () => {
         <button className="w-full bg-blue-500 text-white rounded-sm  pl-3 py-2">
           Sign Up
         </button>
-        <p onClick={() => navigate('/login')} className="text-gray-800">
+        <p onClick={() => navigate('/Event-Manager/login')} className="text-gray-800">
           If you already have an account ? click here to{" "}
           <span className="text-blue-500">sign in</span>
         </p>
