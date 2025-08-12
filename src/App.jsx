@@ -12,7 +12,7 @@ import Start from "./pages/Start";
 
 const App = () => {
   return (
-    <div className="outfit mb-8">
+    <div className="outfit pb-20">
       <Routes>
         <Route path="/Event-Manager" element={<Start />}>
           <Route path="login" element={<Login />} />
